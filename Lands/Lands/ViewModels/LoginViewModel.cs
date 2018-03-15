@@ -7,11 +7,14 @@
     using Xamarin.Forms;
     using Helpers;
     using System;
+    using Models;
+    using Domain;
 
     public class LoginViewModel : BaseViewModel
     {
         #region Services
         private ApiService apiService;
+        private DataService dataService;
         #endregion
 
         #region Attributes
@@ -57,6 +60,7 @@
         public LoginViewModel()
         {
             this.apiService = new ApiService();
+            this.dataService = new DataService();
 
             this.IsRemembered = true;
             this.IsEnabled = true;
@@ -143,10 +147,17 @@
                 "/Users/GetUserByEmail",
                 this.Email);
 
+            UserLocal userLocal = null;
+            if (user != null)
+            {
+                userLocal = this.ToUserLocal(user);
+                this.dataService.DeleteAllAndInsert(userLocal);
+            }
+
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Token = token.AccessToken;
             mainViewModel.TokenType = token.TokenType;
-            mainViewModel.User = user;
+            mainViewModel.User = userLocal;
             mainViewModel.Lands = new LandsViewModel();
             Application.Current.MainPage = new MasterPage();
 
@@ -162,6 +173,20 @@
 
             this.Email = string.Empty;
             this.Password = string.Empty;
+        }
+
+        private UserLocal ToUserLocal(User user)
+        {
+            return new UserLocal
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                ImagePath = user.ImagePath,
+                LastName = user.LastName,
+                Telephone = user.Telephone,
+                UserId = user.UserId,
+                UserTypeId = user.UserTypeId,
+            };
         }
 
         public ICommand RegisterCommand
