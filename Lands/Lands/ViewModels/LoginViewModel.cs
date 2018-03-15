@@ -108,8 +108,9 @@
                 return;
             }
 
+            var apiSecurity = Application.Current.Resources["APISecurity"].ToString();
             var token = await this.apiService.GetToken(
-                "http://landsapi1.azurewebsites.net", 
+                apiSecurity, 
                 this.Email, 
                 this.Password);
 
@@ -136,9 +137,16 @@
                 return;
             }
 
+            var user = await this.apiService.GetUserByEmail(
+                apiSecurity,
+                "/api",
+                "/Users/GetUserByEmail",
+                this.Email);
+
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Token = token.AccessToken;
             mainViewModel.TokenType = token.TokenType;
+            mainViewModel.User = user;
             mainViewModel.Lands = new LandsViewModel();
             Application.Current.MainPage = new MasterPage();
 

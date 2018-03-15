@@ -26,9 +26,6 @@
                     Text="{i18n:Translate ChangeImage}" 
                     TextColor="Black">
                 </Label>
-                <ActivityIndicator
-                    IsRunning="{Binding IsRunning, Mode=TwoWay}">
-                </ActivityIndicator>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -127,7 +124,8 @@
                     </Entry>
                 </Grid>
                 <ActivityIndicator
-                    IsRunning="{Binding IsRunning, Mode=TwoWay}">
+                    IsRunning="{Binding IsRunning, Mode=TwoWay}"
+                    VerticalOptions="CenterAndExpand">
                 </ActivityIndicator>
                 <Button 
                     BackgroundColor="Navy" 
@@ -137,7 +135,8 @@
                     IsEnabled="{Binding IsEnabled, Mode=TwoWay}" 
                     Margin="50,0,50,0" 
                     Text="{i18n:Translate Register}" 
-                    TextColor="White">
+                    TextColor="White"
+                    VerticalOptions="End">
                 </Button>
             </StackLayout>
         </ScrollView>

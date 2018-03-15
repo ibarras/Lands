@@ -71,10 +71,13 @@
                 return;
             }
 
+            var apiLands = Application.Current.Resources["APILands"].ToString();
+            var prefixApiLands = Application.Current.Resources["PrefixAPILands"].ToString();
+            var controllerAPILands = Application.Current.Resources["ControllerAPILands"].ToString();
             var response = await this.apiService.GetList<Land>(
-                "http://restcountries.eu",
-                "/rest", 
-                "/v2/all");
+                apiLands,
+                prefixApiLands, 
+                controllerAPILands);
 
             if (!response.IsSuccess)
             {

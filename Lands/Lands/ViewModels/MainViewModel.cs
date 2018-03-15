@@ -4,6 +4,7 @@
     using System.Collections.ObjectModel;
     using Helpers;
     using Models;
+    using Domain;
 
     public class MainViewModel
     {
@@ -24,6 +25,11 @@
             set;
         }
 
+        public User User
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region ViewModels
