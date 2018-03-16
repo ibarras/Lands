@@ -10,6 +10,8 @@
     using Newtonsoft.Json;
     using Plugin.Connectivity;
     using Domain;
+    using Helpers;
+    using Xamarin.Forms;
 
     public class ApiService
     {
@@ -20,25 +22,25 @@
                 return new Response
                 {
                     IsSuccess = false,
-                    Message = "Please turn on your internet settings.",
+                    Message = Languages.ConnectionError1,
                 };
             }
 
+            var apiSecurity = Application.Current.Resources["APISecurity"].ToString();
             var isReachable = await CrossConnectivity.Current.IsRemoteReachable(
-                "google.com");
+                apiSecurity);
             if (!isReachable)
             {
                 return new Response
                 {
                     IsSuccess = false,
-                    Message = "Check you internet connection.",
+                    Message = Languages.ConnectionError2,
                 };
             }
 
             return new Response
             {
                 IsSuccess = true,
-                Message = "Ok",
             };
         }
 

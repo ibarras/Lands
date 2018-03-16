@@ -16,14 +16,14 @@
             <controls:CircleImage 
                 Aspect="AspectFill"
                 HeightRequest="150"
-                Source="{Binding User.ImageFullPath}">
+                Source="{Binding User.ImageFullPath, Mode=TwoWay}">
             </controls:CircleImage>
 
             <Label
                 FontSize="Large"
                 FontAttributes="Bold"
                 HorizontalOptions="Center"
-                Text="{Binding User.FullName}"
+                Text="{Binding User.FullName, Mode=TwoWay}"
                 TextColor="White">
             </Label>
                 

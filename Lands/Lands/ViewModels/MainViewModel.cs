@@ -6,14 +6,29 @@
     using Models;
     using Helpers;
     using Domain;
+    using Services;
 
-    public class MainViewModel
+    public class MainViewModel : BaseViewModel
     {
+        #region Services
+        private DataService dataService;
+        #endregion  
+
+        #region Attributes
+        private UserLocal user;
+        #endregion
+
         #region Properties
         public List<Land> LandsList
         {
             get;
             set;
+        }
+
+        public void RefreshUser()
+        {
+            var userLocal = this.dataService.First<UserLocal>(false);
+            this.User = userLocal;
         }
 
         public string Token { get; set; }
@@ -28,8 +43,8 @@
 
         public UserLocal User
         {
-            get;
-            set;
+            get { return this.user; }
+            set { SetValue(ref this.user, value); }
         }
         #endregion
 
@@ -69,10 +84,12 @@
         public MainViewModel()
         {
             instance = this;
+            this.dataService = new DataService();
             this.Login = new LoginViewModel();
             this.LoadMenu();
         }
         #endregion
+
 
         #region Singleton
         private static MainViewModel instance;

@@ -113,7 +113,6 @@
             }
 
             var apiSecurity = Application.Current.Resources["APISecurity"].ToString();
-
             var token = await this.apiService.GetToken(
                 apiSecurity, 
                 this.Email, 
