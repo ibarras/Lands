@@ -19,10 +19,16 @@
             get;
             internal set;
         }
-        #endregion
 
-        #region Constructors
-        public App()
+		public static MasterPage Master 
+        { 
+            get; 
+            internal set; 
+        }
+		#endregion
+
+		#region Constructors
+		public App()
         {
             InitializeComponent();
 
