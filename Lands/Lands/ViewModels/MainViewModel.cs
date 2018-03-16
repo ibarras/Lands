@@ -1,11 +1,9 @@
 ﻿namespace Lands.ViewModels
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using Models;
     using Helpers;
-    using Domain;
+    using Models;
     using Services;
 
     public class MainViewModel : BaseViewModel
@@ -89,7 +87,6 @@
             this.LoadMenu();
         }
         #endregion
-
 
         #region Singleton
         private static MainViewModel instance;
