@@ -36,12 +36,19 @@
 
         private void Navigate()
         {
+            App.Master.IsPresented = false;
+
             if (this.PageName == "LoginPage")
             {
                 Settings.Token = string.Empty;
                 Settings.TokenType = string.Empty;
                 Settings.IsRemembered = string.Empty;
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
+            }
+            else if (this.PageName == "MyProfilePage")
+            {
+                MainViewModel.GetInstance().MyProfile = new MyProfileViewModel();
+                App.Navigator.PushAsync(new MyProfilePage());
             }
         }
     }

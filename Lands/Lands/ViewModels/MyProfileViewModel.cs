@@ -1,18 +1,21 @@
 ﻿namespace Lands.ViewModels
 {
+    using System;
     using System.Windows.Input;
     using Domain;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using Models;
     using Plugin.Media;
     using Plugin.Media.Abstractions;
     using Services;
     using Xamarin.Forms;
 
-    public class RegisterViewModel : BaseViewModel
+    public class MyProfileViewModel : BaseViewModel
     {
         #region Services
         private ApiService apiService;
+        private DataService dataService;
         #endregion
 
         #region Attributes
@@ -23,6 +26,12 @@
         #endregion
 
         #region Properties
+        public UserLocal User
+        {
+            get;
+            set;
+        }
+
         public ImageSource ImageSource
         {
             get { return this.imageSource; }
@@ -40,66 +49,31 @@
             get { return this.isRunning; }
             set { SetValue(ref this.isRunning, value); }
         }
-
-        public string FirstName
-        {
-            get;
-            set;
-        }
-
-        public string LastName
-        {
-            get;
-            set;
-        }
-
-        public string Email
-        {
-            get;
-            set;
-        }
-
-        public string Telephone
-        {
-            get;
-            set;
-        }
-
-        public string Password
-        {
-            get;
-            set;
-        }
-
-        public string Confirm
-        {
-            get;
-            set;
-        }
         #endregion
 
         #region Constructors
-        public RegisterViewModel()
+        public MyProfileViewModel()
         {
+            this.User = MainViewModel.GetInstance().User;
+            this.ImageSource = this.User.ImageFullPath;
             this.apiService = new ApiService();
-
+            this.dataService = new DataService();
             this.IsEnabled = true;
-            this.ImageSource = "no_image";
         }
         #endregion
 
         #region Commands
-        public ICommand RegisterCommand
+        public ICommand SaveCommand
         {
             get
             {
-                return new RelayCommand(Register);
+                return new RelayCommand(Save);
             }
         }
 
-        private async void Register()
+        private async void Save()
         {
-            if (string.IsNullOrEmpty(this.FirstName))
+            if (string.IsNullOrEmpty(this.User.FirstName))
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
@@ -108,7 +82,7 @@
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.LastName))
+            if (string.IsNullOrEmpty(this.User.LastName))
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
@@ -117,7 +91,7 @@
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.Email))
+            if (string.IsNullOrEmpty(this.User.Email))
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
@@ -126,7 +100,7 @@
                 return;
             }
 
-            if (!RegexUtilities.IsValidEmail(this.Email))
+            if (!RegexUtilities.IsValidEmail(this.User.Email))
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
@@ -135,47 +109,11 @@
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.Telephone))
+            if (string.IsNullOrEmpty(this.User.Telephone))
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
                     Languages.PhoneValidation,
-                    Languages.Accept);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.Password))
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    Languages.Error,
-                    Languages.PasswordValidation,
-                    Languages.Accept);
-                return;
-            }
-
-            if (this.Password.Length < 6)
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    Languages.Error,
-                    Languages.PasswordValidation2,
-                    Languages.Accept);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.Confirm))
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    Languages.Error,
-                    Languages.ConfirmValidation,
-                    Languages.Accept);
-                return;
-            }
-
-            if (this.Password != this.Confirm)
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    Languages.Error,
-                    Languages.ConfirmValidation2,
                     Languages.Accept);
                 return;
             }
@@ -201,23 +139,16 @@
                 imageArray = FilesHelper.ReadFully(this.file.GetStream());
             }
 
-            var user = new User
-            {
-                Email = this.Email,
-                FirstName = this.FirstName,
-                LastName = this.LastName,
-                Telephone = this.Telephone,
-                ImageArray = imageArray,
-                UserTypeId = 1,
-                Password = this.Password,
-            };
+            var userDomain = this.ToUserDomain(this.User, imageArray);
 
             var apiSecurity = Application.Current.Resources["APISecurity"].ToString();
-            var response = await this.apiService.Post(
+            var response = await this.apiService.Put(
                 apiSecurity,
                 "/api",
                 "/Users",
-                user);
+                MainViewModel.GetInstance().TokenType,
+                MainViewModel.GetInstance().Token,
+                userDomain);
 
             if (!response.IsSuccess)
             {
@@ -230,14 +161,53 @@
                 return;
             }
 
+            var user = await this.apiService.GetUserByEmail(
+                apiSecurity,
+                "/api",
+                "/Users/GetUserByEmail",
+                this.User.Email);
+
+            UserLocal userLocal = null;
+            if (user != null)
+            {
+                userLocal = this.ToUserLocal(user);
+                this.dataService.DeleteAllAndInsert(userLocal);
+                MainViewModel.GetInstance().User = userLocal;
+            }
+
             this.IsRunning = false;
             this.IsEnabled = true;
 
-            await Application.Current.MainPage.DisplayAlert(
-                Languages.ConfirmLabel,
-                Languages.UserRegisteredMessage,
-                Languages.Accept);
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
+        }
+
+        private UserLocal ToUserLocal(User user)
+        {
+            return new UserLocal
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                ImagePath = user.ImagePath,
+                LastName = user.LastName,
+                Telephone = user.Telephone,
+                UserId = user.UserId,
+                UserTypeId = user.UserTypeId,
+            };
+        }
+
+        private User ToUserDomain(UserLocal user, byte[] imageArray)
+        {
+            return new User
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                ImageArray = imageArray,
+                ImagePath = user.ImagePath,
+                LastName = user.LastName,
+                Telephone = user.Telephone,
+                UserId = user.UserId,
+                UserTypeId = user.UserTypeId.Value,
+            };
         }
 
         public ICommand ChangeImageCommand
