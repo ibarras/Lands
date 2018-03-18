@@ -357,4 +357,10 @@
   <data name="IncorrectPassword" xml:space="preserve">
     <value>The password is incorrect.</value>
   </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
 </root>
