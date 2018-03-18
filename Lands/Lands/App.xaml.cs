@@ -7,6 +7,7 @@
     using Models;
     using Services;
     using System;
+    using System.Threading.Tasks;
 
     public partial class App : Application
 	{
@@ -64,7 +65,7 @@
             }
         }
 
-        public static void NavigateToProfile(FacebookResponse profile)
+        public static async Task NavigateToProfile(FacebookResponse profile)
         {
             var x = 1;
             x++;
