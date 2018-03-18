@@ -154,7 +154,7 @@
     <value>Vous avez oublié votre mot de passe ?</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>&amp;Inscrire dans la base de registres...</value>
+    <value>Inscrire dans la base de registres...</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Rechercher</value>
@@ -310,7 +310,7 @@
     <value>Le mot de passe et sa confirmation ne coïncident pas.</value>
   </data>
   <data name="UserRegisteredMessage" xml:space="preserve">
-    <value>L&amp;#39;utilisateur a été créé, vous pouvez maintenant vous connecter avec cet email et ce mot de passe.</value>
+    <value>L'utilisateur a été créé, vous pouvez maintenant vous connecter avec cet email et ce mot de passe.</value>
   </data>
   <data name="SourceImageQuestion" xml:space="preserve">
     <value>Où voulez-vous prendre l&amp;#39;image ?!</value>
