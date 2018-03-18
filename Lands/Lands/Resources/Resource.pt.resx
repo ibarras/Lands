@@ -357,7 +357,4 @@
   <data name="IncorrectPassword" xml:space="preserve">
     <value>A senha atual está incorreta.</value>
   </data>
-  <data name="Test" xml:space="preserve">
-    <value>Teste</value>
-  </data>
 </root>

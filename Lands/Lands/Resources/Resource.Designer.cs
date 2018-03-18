@@ -277,15 +277,6 @@ namespace Lands.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
-        /// </summary>
-        public static string Delete {
-            get {
-                return ResourceManager.GetString("Delete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Demonym:.
         /// </summary>
         public static string Demonym {
@@ -768,15 +759,6 @@ namespace Lands.Resources {
         public static string Subregion {
             get {
                 return ResourceManager.GetString("Subregion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Test.
-        /// </summary>
-        public static string Test {
-            get {
-                return ResourceManager.GetString("Test", resourceCulture);
             }
         }
         
