@@ -25,7 +25,7 @@ namespace Lands.iOS.Implementations
             }
 
             var auth = new OAuth2Authenticator(
-                clientId: "226666941243823",
+                clientId: "201105497150884",
                 scope: "",
                 authorizeUrl: new Uri("https://www.facebook.com/v2.8/dialog/oauth"),
                 redirectUrl: new Uri("http://www.facebook.com/connect/login_success.html"));

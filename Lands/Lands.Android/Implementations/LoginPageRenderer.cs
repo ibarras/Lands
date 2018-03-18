@@ -19,7 +19,7 @@ namespace Lands.Droid.Implementations
             var activity = this.Context as Activity;
 
             var auth = new OAuth2Authenticator(
-                clientId: "226666941243823",
+                clientId: "201105497150884",
                 scope: "email",
                 authorizeUrl: new Uri("https://www.facebook.com/dialog/oauth/"),
                 redirectUrl: new Uri("https://www.facebook.com/connect/login_success.html"));
