@@ -1,12 +1,13 @@
 ﻿namespace Lands
 {
-    using Xamarin.Forms;
-    using Views;
-    using ViewModels;
+    using System;
+    using System.Threading.Tasks;
     using Helpers;
     using Models;
     using Services;
-    using System;
+    using ViewModels;
+    using Views;
+    using Xamarin.Forms;
 
     public partial class App : Application
 	{
@@ -56,7 +57,7 @@
             }
         }
 
-        public static void NavigateToProfile(FacebookResponse profile)
+        public static async Task NavigateToProfile(FacebookResponse profile)
         {
             var x = 1;
             x++;

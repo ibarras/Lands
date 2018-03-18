@@ -67,6 +67,14 @@
             }
         }
 
+        public async Task<FacebookResponse> GetFacebookProfile(string url)
+        {
+            var httpClient = new HttpClient();
+            var userJson = await httpClient.GetStringAsync(url);
+            var facebookResponse = JsonConvert.DeserializeObject<FacebookResponse>(userJson);
+            return facebookResponse;
+        }
+
         public async Task<Response> ChangePassword(
             string urlBase, 
             string servicePrefix, 
