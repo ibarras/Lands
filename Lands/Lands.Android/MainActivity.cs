@@ -32,7 +32,7 @@
             [GeneratedEnum] Permission[] grantResults)
         {
             PermissionsImplementation.Current.OnRequestPermissionsResult(
-                requestCode, 
+               requestCode, 
                permissions, 
                grantResults);
         }
