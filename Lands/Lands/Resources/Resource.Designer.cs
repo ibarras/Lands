@@ -520,5 +520,11 @@ namespace Lands.Resources {
                 return ResourceManager.GetString("ChagePasswordConfirm", resourceCulture);
             }
         }
+        
+        public static string IncorrectPassword {
+            get {
+                return ResourceManager.GetString("IncorrectPassword", resourceCulture);
+            }
+        }
     }
 }

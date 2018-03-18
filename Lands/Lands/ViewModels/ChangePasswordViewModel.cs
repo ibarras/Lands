@@ -11,6 +11,7 @@
     {
         #region Services
         private ApiService apiService;
+        private DataService dataService;
         #endregion
 
         #region Attributes
@@ -54,6 +55,7 @@
         public ChangePasswordViewModel()
         {
             this.apiService = new ApiService();
+            this.dataService = new DataService();
             this.IsEnabled = true;
         }
         #endregion
@@ -83,6 +85,15 @@
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
                     Languages.PasswordValidation2,
+                    Languages.Accept);
+                return;
+            }
+
+            if (this.CurrentPassword != MainViewModel.GetInstance().User.Password)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    Languages.Error,
+                    Languages.IncorrectPassword,
                     Languages.Accept);
                 return;
             }
@@ -166,6 +177,9 @@
                 return;
             }
 
+            MainViewModel.GetInstance().User.Password = this.NewPassword;
+            this.dataService.Update(MainViewModel.GetInstance().User);
+
             this.IsRunning = false;
             this.IsEnabled = true;
 
@@ -173,7 +187,7 @@
                 Languages.ConfirmLabel,
                 Languages.ChagePasswordConfirm,
                 Languages.Accept);
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
         }
         #endregion
     }

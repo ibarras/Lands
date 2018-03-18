@@ -351,5 +351,10 @@
         {
             get { return Resource.ChagePasswordConfirm; }
         }
+
+        public static string IncorrectPassword
+        {
+            get { return Resource.IncorrectPassword; }
+        }
     }
 }
