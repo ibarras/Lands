@@ -6,6 +6,7 @@
     using Views;
     using Xamarin.Forms;
     using Helpers;
+    using System;
 
     public class LoginViewModel : BaseViewModel
     {
@@ -65,6 +66,19 @@
         #endregion
 
         #region Commands
+        public ICommand LoginFacebookCommand
+        {
+            get
+            {
+                return new RelayCommand(LoginFacebook);
+            }
+        }
+
+        private async void LoginFacebook()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new LoginFacebookPage());
+        }
+
         public ICommand LoginCommand
         {
             get
