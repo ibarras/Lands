@@ -68,6 +68,19 @@
         #endregion
 
         #region Commands
+        public ICommand LoginFacebookComand
+        {
+            get
+            {
+                return new RelayCommand(LoginFacebook);
+            }
+        }
+
+        private async void LoginFacebook()
+        {
+            Application.Current.MainPage.Navigation.PushAsync(new LoginFacebookPage());
+        }
+
         public ICommand LoginCommand
         {
             get
