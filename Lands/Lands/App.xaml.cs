@@ -1,14 +1,13 @@
 ﻿namespace Lands
 {
-    using Xamarin.Forms;
-    using Views;
-    using ViewModels;
-    using Helpers;
-    using Services;
-    using Domain;
-    using Models;
     using System;
     using System.Threading.Tasks;
+    using Helpers;
+    using Models;
+    using Services;
+    using ViewModels;
+    using Views;
+    using Xamarin.Forms;
 
     public partial class App : Application
 	{

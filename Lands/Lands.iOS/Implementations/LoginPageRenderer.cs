@@ -1,5 +1,5 @@
 ﻿[assembly: Xamarin.Forms.ExportRenderer(
-    typeof(Lands.Views.LoginFacebookPage), 
+    typeof(Lands.Views.LoginFacebookPage),
     typeof(Lands.iOS.Implementations.LoginPageRenderer))]
 
 namespace Lands.iOS.Implementations
@@ -8,9 +8,7 @@ namespace Lands.iOS.Implementations
     using System.Threading.Tasks;
     using Models;
     using Services;
-    using Views;
     using Xamarin.Auth;
-    using Xamarin.Forms;
     using Xamarin.Forms.Platform.iOS;
 
     public class LoginPageRenderer : PageRenderer

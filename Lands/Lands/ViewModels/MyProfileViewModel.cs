@@ -208,7 +208,7 @@
                 LastName = user.LastName,
                 Telephone = user.Telephone,
                 UserId = user.UserId,
-                UserTypeId = user.UserTypeId.Value,
+                UserTypeId = user.UserTypeId,
             };
         }
 
