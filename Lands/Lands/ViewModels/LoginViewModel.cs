@@ -68,6 +68,19 @@
         #endregion
 
         #region Commands
+        public ICommand LoginFacebookComand
+        {
+            get
+            {
+                return new RelayCommand(LoginFacebook);
+            }
+        }
+
+        private async void LoginFacebook()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new LoginFacebookPage());
+        }
+
         public ICommand LoginCommand
         {
             get
@@ -145,18 +158,20 @@
                 apiSecurity,
                 "/api",
                 "/Users/GetUserByEmail",
+                token.TokenType,
+                token.AccessToken,
                 this.Email);
 
             UserLocal userLocal = null;
             if (user != null)
             {
-                userLocal = this.ToUserLocal(user);
+                userLocal = Converter.ToUserLocal(user);
                 this.dataService.DeleteAllAndInsert(userLocal);
+                this.dataService.DeleteAllAndInsert(token);
             }
 
             var mainViewModel = MainViewModel.GetInstance();
-            mainViewModel.Token = token.AccessToken;
-            mainViewModel.TokenType = token.TokenType;
+            mainViewModel.Token = token;
             mainViewModel.User = userLocal;
             mainViewModel.Lands = new LandsViewModel();
             Application.Current.MainPage = new MasterPage();
@@ -173,20 +188,6 @@
 
             this.Email = string.Empty;
             this.Password = string.Empty;
-        }
-
-        private UserLocal ToUserLocal(User user)
-        {
-            return new UserLocal
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                ImagePath = user.ImagePath,
-                LastName = user.LastName,
-                Telephone = user.Telephone,
-                UserId = user.UserId,
-                UserTypeId = user.UserTypeId,
-            };
         }
 
         public ICommand RegisterCommand

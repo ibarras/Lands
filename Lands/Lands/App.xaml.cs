@@ -5,6 +5,7 @@
     using ViewModels;
     using Helpers;
     using Services;
+    using Domain;
     using Models;
     using System;
     using System.Threading.Tasks;
@@ -34,9 +35,9 @@
             {
                 var dataService = new DataService();
                 var user = dataService.First<UserLocal>(false);
+                var token = dataService.First<TokenResponse>(false);
                 var mainViewModel = MainViewModel.GetInstance();
-                mainViewModel.Token = Settings.Token;
-                mainViewModel.TokenType = Settings.TokenType;
+                mainViewModel.Token = token;
                 mainViewModel.User = user;
                 mainViewModel.Lands = new LandsViewModel();
                 Application.Current.MainPage = new MasterPage();
@@ -53,12 +54,59 @@
         {
             get
             {
-                return new Action(() => App.Current.MainPage = new LoginPage());
+                return new Action(() => Application.Current.MainPage = 
+                                  new NavigationPage(new LoginPage()));
             }
         }
 
-        public static async Task NavigateToProfile(FacebookResponse profile)
+        public static async Task NavigateToProfile(Models.FacebookResponse profile)
         {
+            if (profile == null)
+            {
+                Application.Current.MainPage = new NavigationPage(new LoginPage());
+                return;
+            }
+
+            var apiService = new ApiService();
+            var dataService = new DataService();
+
+            var apiSecurity = Application.Current.Resources["APISecurity"].ToString();
+            var token = await apiService.LoginFacebook(
+                apiSecurity, 
+                "/api", 
+                "/Users/LoginFacebook", 
+                profile);
+
+            if (token == null)
+            {
+                Application.Current.MainPage = new NavigationPage(new LoginPage());
+                return;
+            }
+
+            var user = await apiService.GetUserByEmail(
+                apiSecurity,
+                "/api",
+                "/Users/GetUserByEmail",
+                token.TokenType,
+                token.AccessToken,
+                token.UserName);
+
+            UserLocal userLocal = null;
+            if (user != null)
+            {
+                userLocal = Converter.ToUserLocal(user);
+                dataService.DeleteAllAndInsert(userLocal);
+            }
+
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Token = token;
+            mainViewModel.User = userLocal;
+            mainViewModel.Lands = new LandsViewModel();
+            Application.Current.MainPage = new MasterPage();
+            Settings.IsRemembered = "true";
+
+            mainViewModel.Lands = new LandsViewModel();
+            Application.Current.MainPage = new MasterPage();
         }
 
         protected override void OnStart()
